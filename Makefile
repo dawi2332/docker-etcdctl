@@ -1,8 +1,8 @@
-GPGV=gpgv2
+GPG=gpg2
 ETCD_VERSION=v0.4.6
 ETCD_DIR=etcd-$(ETCD_VERSION)-linux-amd64
 ETCD_TGZ=$(ETCD_DIR).tar.gz
-ETCD_SIG=$(ETCD_TGZ).gpg
+ETCD_GPG=$(ETCD_TGZ).gpg
 DOCKER_USERNAME=dawi2332
 DOCKER_NAME=etcdctl
 DOCKER_TAG=$(DOCKER_USERNAME)/$(DOCKER_NAME):$(ETCD_VERSION)
@@ -17,21 +17,19 @@ run: build
 build: deps
 	docker build -t $(DOCKER_TAG) .
 
-deps: $(ETCD_DIR)
+deps: etcdctl
+
+etcdctl: $(ETCD_DIR)
 	cp $(ETCD_DIR)/etcdctl .
 
 clean:
 	-rm -f $(ETCD_TGZ)
-	-rm -f $(ETCD_SIG)
+	-rm -f $(ETCD_GPG)
 	-rm -rf $(ETCD_DIR)
 	-rm -f etcdctl
 
-$(ETCD_TGZ):
-	wget https://github.com/coreos/etcd/releases/download/$(ETCD_VERSION)/$(ETCD_DIR).tar.gz
+$(ETCD_GPG):
+	wget https://github.com/coreos/etcd/releases/download/$(ETCD_VERSION)/$(ETCD_GPG)
 
-$(ETCD_SIG):
-	wget https://github.com/coreos/etcd/releases/download/$(ETCD_VERSION)/$(ETCD_DIR).tar.gz.gpg
-
-$(ETCD_DIR): $(ETCD_TGZ) $(ETCD_SIG)
-	$(GPGV) $(ETCD_SIG)
-	tar -xzf $(ETCD_TGZ)
+$(ETCD_DIR): $(ETCD_GPG)
+	$(GPG) --decrypt $(ETCD_GPG) | tar -xzf -
