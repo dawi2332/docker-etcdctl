@@ -9,7 +9,10 @@ DOCKER_TAG=$(DOCKER_USERNAME)/$(DOCKER_NAME):$(ETCD_VERSION)
 
 .PHONY=all deps build push clean clean
 
-all: run
+all:
+
+push: build
+	docker push $(DOCKER_TAG)
 
 run: build
 	docker run -it --rm $(DOCKER_TAG)
