@@ -1,1 +1,5 @@
 .git
+*.gpg
+Makefile
+README.md
+etcd-*
