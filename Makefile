@@ -1,10 +1,10 @@
 GPG=gpg2
-ETCD_VERSION=v0.4.6
+ETCD_VERSION=v2.0.10
 ETCD_DIR=etcd-$(ETCD_VERSION)-linux-amd64
 ETCD_TGZ=$(ETCD_DIR).tar.gz
 ETCD_GPG=$(ETCD_TGZ).gpg
 DOCKER_USERNAME=dawi2332
-DOCKER_NAME=etcdctl
+DOCKER_NAME=alpine.etcdctl
 DOCKER_TAG=$(DOCKER_USERNAME)/$(DOCKER_NAME):$(ETCD_VERSION)
 
 .PHONY=all deps build push clean clean
